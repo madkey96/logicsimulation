@@ -1,25 +1,24 @@
-1. How to run the file?
-	Compile basic.cpp 
-	run the executable with an argument that is the input filename
-	Ex: ./a.out "input1.txt"
+The folder contains codes in 3 languages:
+	Python (project.py)
+	C++    (project.cpp)
+	Scilab (project.sce)
 
-2. Format of Input file
-	The first line should contain the total number of nodes in the circuit
-	The subsequent lines would be in the format
-	typeOfGate OutputNode InputNodes (all space separated)
-
-3. Inputs to circuit
-	As the program is running it asks the values of input nodes.
-
-4. Gate value association
-	value | GATE
-	-------------
-	  0   | INPUT
-	  1   |  AND
-	  2   |  OR
-	  3   | NAND
-	  4   |  NOR
-	  5   |  NOT
-	  6   |  XOR
-	  7   | NXOR
-	  -----------
+Python:
+	Run project.py
+	It will ask for an input file name
+	Give input as pyinput.txt or pyinput1.txt
+	Then it will ask for the bool values of input nodes depending no the file chosen
+	Give the values and it will display the simulation results
+	
+	While execution this also generates sciinput.txt which is the input for 
+	scilab code
+Scilab:
+	Execute project.sce
+	It takes the circuit from sciinput.txt by default
+	It will ask for the bool values of input nodes
+	Give the values and it will display the simulation results
+C++   :
+	compile project.cpp
+	and the run a.out with input argument as cppinput.txt
+	$ ./a.out cppinput.txt
+	Then give the boolean inputs when prompted.

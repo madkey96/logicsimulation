@@ -15,10 +15,17 @@ Problem:
 Contents:
 	a36_logicSimulation/
 		doc/
+			documentation.pdf
 		src/
-			basic.cpp
+			project.cpp
+			project.sce
+			project.py
+			inputconv.py
+			pyinput.txt
+			pyinput1.txt
+			bigpyinput.txt
+			sciinput.txt
+			cppinput.txt
 			readme.txt
-			input.txt
-			input1.txt
 		readme.txt
 

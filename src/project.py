@@ -1,5 +1,15 @@
-import sys
+#!/usr/bin/python
 
+########################################################################################
+###### EE 677 Project           ########################################################
+###### Madhu kiran P, 100070046 ########################################################
+########################################################################################
+
+# Imports
+import sys
+from prettytable import PrettyTable
+
+# Converts the given input to a more readable form
 def inputconv(ifile):
 	### Opening file and reading lines ###
 	ifile = open(str(ifile), 'r')
@@ -13,7 +23,8 @@ def inputconv(ifile):
 	"NOR" : 4,
 	"NOT" : 5,
 	"XOR" : 6,
-	"NXOR": 7
+	"NXOR": 7,
+	"BUFF": 8
 	}
 
 	### Parsing the file ###
@@ -54,7 +65,7 @@ def inputconv(ifile):
 		outstr = outstr + '\n';
 
 	outstr = str(m) + '\n' + outstr;
-	ofile = open('output.txt', 'w')
+	ofile = open('sciinput.txt', 'w')
 	ofile.write(outstr)
 	ifile.close()
 	ofile.close()
@@ -73,7 +84,7 @@ def main():
 	ifile = raw_input()
 	inputconv(ifile)
 
-	rfile = open('output.txt', 'r')
+	rfile = open('sciinput.txt', 'r')
 	lines = rfile.readlines()
 
 	nwires = int(lines[0].replace('\n',''))
@@ -106,7 +117,9 @@ def main():
 		circuit[xi[1]].inputs = xi[2:]
 
 	### Breadth first search ###
-	bfs = oarrayi
+	bfs = []
+	for n in oarrayi:
+		bfs.append(n)
 	count = 0
 	while len(bfs)!=count:
 		temp = bfs[count]
@@ -116,33 +129,57 @@ def main():
 			bfs.append(i)
 		count = count + 1	
 	bfs.reverse()
-	
 	while 1:
+		error = 1
+		while error == 1:
+			out = ''
+			for n in inarrays:
+				out = out + n + ' '
+			print "Give space separated inputs for nodes in order:"
+			print out
+			userin = raw_input()
+			userin = userin.split(' ')
+			if len(userin)!=len(inarrayi):
+				print "Error, wrong number of inputs"
+			else:
+				for n in range(0, len(inarrayi)):
+					if int(userin[n])!=0:
+						circuit[inarrayi[n]].value = 1
+					else:
+						circuit[inarrayi[n]].value = 0
+				error = 0				
+
+		### Circuit evaluation
 		for n in bfs:
 			if circuit[n].gate == 0:
-				print 'Give input for node', n
-				circuit[n].value = input()
+				pass
+			### AND gate
 			elif circuit[n].gate == 1:
 				circuit[n].value = 1
 				for b in circuit[n].inputs:
 					circuit[n].value = circuit[n].value & circuit[b].value
+			### OR gate
 			elif circuit[n].gate == 2:
 				circuit[n].value = 0
 				for b in circuit[n].inputs:
 					circuit[n].value = circuit[n].value | circuit[b].value
+			### NAND gate
 			elif circuit[n].gate == 3:
 				circuit[n].value = 1
 				for b in circuit[n].inputs:
 					circuit[n].value = circuit[n].value & circuit[b].value
 				circuit[n].value = 1-circuit[n].value
+			### NOR gate
 			elif circuit[n].gate == 4:
 				circuit[n].value = 0
 				for b in circuit[n].inputs:
 					circuit[n].value = circuit[n].value | circuit[b].value
 				circuit[n].value = 1-circuit[n].value
+			### NOT gate
 			elif circuit[n].gate == 5:
 				for b in circuit[n].inputs:
 					circuit[n].value = 1-circuit[b].value
+			### XOR gate
 			elif circuit[n].gate == 6:
 				circuit[n].value = 0
 				for b in circuit[n].inputs:
@@ -150,6 +187,7 @@ def main():
 						circuit[n].value = 1-circuit[b].value
 					else:
 						circuit[n].value = circuit[b].value
+			### XNOR gate
 			elif circuit[n].gate == 7:
 				circuit[n].value = 0
 				for b in circuit[n].inputs:
@@ -158,13 +196,27 @@ def main():
 					else:
 						circuit[n].value = circuit[b].value
 				circuit[n].value = 1- circuit[n].value
+			### BUFFER
+			elif circuit[n].gate == 8:
+				for b in circuit[n].inputs:
+					circuit[n].value = circuit[b].value
 
-			print 'Computed output at node', n, '=', circuit[n].value
-		print ''
-		print '#################################################'
-		print '############## Next Round of inputs #############'
-		print '#################################################'
-
+		### Printing the output
+		table = PrettyTable()
+		c1 = []
+		c2 = []
+		for n in bfs:
+			c1.append(n)
+			c2.append(circuit[n].value)
+		table.padding_width = 1
+		table.add_column("Node", c1)
+		table.add_column("Value",c2)
+		print "Evaluation order and evaluated values:"
+		print table
+		print "Required outputs"			
+		for n in oarrayi:
+			print n, "->", circuit[n].value	
+### Program starts here and calls the main function		
 if __name__ == '__main__':
 	main()
 
